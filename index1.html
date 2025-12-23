@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Boutique Style Lèlà Store</title>
+    <title><link rel="icon" href="logo lena store.png" type="image/jpeg">Boutique Style Lèlà Store</title>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
     <style>
         /* --- CSS : MATERIAL DESIGN --- */
@@ -49,6 +49,20 @@
             cursor: pointer;
             position: relative;
             padding: 5px;
+        }
+                /* Agrandissement de l'icône SVG du panier */
+        .cart-icon svg {
+            width: 40px;  /* Nouvelle largeur (avant 28px) */
+            height: 40px; /* Nouvelle hauteur */
+            transition: transform 0.2s;
+        }
+
+        /* Ajustement de la position du compteur rouge pour qu'il colle bien à la grande icône */
+        .cart-count {
+            top: -2px;    /* On remonte un peu */
+            right: -2px;  /* On décale un peu */
+            font-size: 0.85rem; /* On grossit un peu le texte du chiffre */
+            padding: 3px 7px;
         }
         .cart-count {
             position: absolute;
@@ -223,6 +237,8 @@
             transition: transform 0.3s ease;
             cursor: pointer;
             border: 2px solid transparent;
+            display: flex;
+            flex-direction: column;
         }
 
         .carousel-slide:hover {
@@ -231,15 +247,31 @@
             border-color: var(--promo-color);
         }
 
-        .carousel-image {
+        .carousel-image-container {
+            position: relative;
             width: 100%;
             height: 180px;
+            overflow: hidden;
+            flex-shrink: 0;
+        }
+
+        .carousel-image {
+            width: 100%;
+            height: 100%;
             object-fit: cover;
             background-color: #eee;
+            transition: transform 0.3s ease;
+        }
+
+        .carousel-slide:hover .carousel-image {
+            transform: scale(1.05);
         }
 
         .carousel-info {
             padding: 15px;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
         }
 
         .carousel-name {
@@ -259,6 +291,14 @@
         .carousel-categories {
             font-size: 0.8rem;
             color: var(--gray-text);
+            margin-bottom: 10px;
+        }
+
+        .carousel-actions {
+            margin-top: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
         }
 
         .carousel-nav {
@@ -315,6 +355,49 @@
             transform: scale(1.2);
         }
 
+        /* Boutons d'action pour le carousel */
+        .btn-carousel-gallery {
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+        }
+
+        .btn-carousel-gallery:hover {
+            background: #016c4d;
+            transform: translateY(-2px);
+        }
+
+        .btn-carousel-cart {
+            background: white;
+            color: var(--primary-color);
+            border: 2px solid var(--primary-color);
+            padding: 8px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+        }
+
+        .btn-carousel-cart:hover {
+            background: var(--primary-color);
+            color: white;
+            transform: translateY(-2px);
+        }
+
         /* --- GRILLE PRODUITS --- */
         .products-grid {
             display: grid;
@@ -326,13 +409,14 @@
         .product-card {
             background: white;
             border-radius: 12px;
-            transition: background 0.2s;
+            transition: all 0.2s;
             cursor: pointer;
             padding: 10px;
             display: flex;
             flex-direction: column;
             position: relative;
             border: 1px solid #eee;
+            overflow: hidden;
         }
 
         .product-card:hover {
@@ -341,14 +425,26 @@
             transform: translateY(-3px);
         }
 
-        .product-image {
+        .product-image-container {
+            position: relative;
             width: 100%;
             aspect-ratio: 1/1;
-            object-fit: cover;
+            overflow: hidden;
             border-radius: 20px;
             margin-bottom: 10px;
             box-shadow: 0 1px 2px rgba(0,0,0,0.2);
             background-color: #eee;
+        }
+
+        .product-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+
+        .product-card:hover .product-image {
+            transform: scale(1.05);
         }
 
         .product-info { display: flex; flex-direction: column; flex-grow: 1; }
@@ -356,6 +452,43 @@
         .product-cat { font-size: 0.8rem; color: var(--gray-text); margin-bottom: 5px; }
         .product-price { font-size: 0.9rem; color: var(--gray-text); }
         
+        /* Bouton pour voir la galerie */
+        .view-gallery-btn {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 2;
+            transition: all 0.3s ease;
+        }
+
+        .view-gallery-btn:hover {
+            background: rgba(0, 0, 0, 0.9);
+            transform: scale(1.1);
+        }
+
+        .media-count {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background: rgba(255, 71, 87, 0.9);
+            color: white;
+            font-size: 0.7rem;
+            padding: 3px 8px;
+            border-radius: 12px;
+            font-weight: bold;
+            z-index: 2;
+        }
+
         #no-results {
             text-align: center;
             color: var(--gray-text);
@@ -372,8 +505,173 @@
         }
 
         /* MODAL & FOOTER */
-        .modal { display: none; position: fixed; z-index: 200; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.4); backdrop-filter: blur(2px); }
-        .modal-content { background-color: white; margin: 5% auto; padding: 0; border-radius: 24px; width: 95%; max-width: 500px; box-shadow: 0 4px 20px rgba(0,0,0,0.15); max-height: 90vh; display: flex; flex-direction: column; overflow: hidden; }
+        .modal { 
+            display: none; 
+            position: fixed; 
+            z-index: 1000; 
+            left: 0; 
+            top: 0; 
+            width: 100%; 
+            height: 100%; 
+            background-color: rgba(0,0,0,0.9); 
+            backdrop-filter: blur(3px); 
+        }
+        
+        .modal-content { 
+            background-color: white; 
+            margin: 5% auto; 
+            padding: 0; 
+            border-radius: 24px; 
+            width: 95%; 
+            max-width: 500px; 
+            box-shadow: 0 4px 20px rgba(0,0,0,0.15); 
+            max-height: 90vh; 
+            display: flex; 
+            flex-direction: column; 
+            overflow: hidden; 
+        }
+        
+        /* Modal pour la galerie */
+        .gallery-modal { 
+            display: none; 
+            position: fixed; 
+            z-index: 2000; 
+            left: 0; 
+            top: 0; 
+            width: 100%; 
+            height: 100%; 
+            background-color: rgba(0,0,0,0.95); 
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .gallery-content {
+            width: 90%;
+            max-width: 800px;
+            height: 80vh;
+            position: relative;
+            background: black;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        
+        .gallery-header {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            padding: 15px 20px;
+            background: linear-gradient(to bottom, rgba(0,0,0,0.7), transparent);
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 10;
+        }
+        
+        .gallery-body {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+        
+        .gallery-media {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+        }
+        
+        .gallery-video {
+            max-width: 100%;
+            max-height: 100%;
+        }
+        
+        .gallery-nav {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 60px;
+            height: 60px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            border: none;
+            color: white;
+            font-size: 24px;
+            z-index: 10;
+            transition: all 0.3s ease;
+        }
+        
+        .gallery-nav:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-50%) scale(1.1);
+        }
+        
+        .gallery-prev {
+            left: 20px;
+        }
+        
+        .gallery-next {
+            right: 20px;
+        }
+        
+        .gallery-close {
+            cursor: pointer;
+            font-size: 30px;
+            color: white;
+            background: none;
+            border: none;
+            padding: 5px;
+        }
+        
+        .gallery-thumbnails {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 15px;
+            background: linear-gradient(to top, rgba(0,0,0,0.7), transparent);
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            overflow-x: auto;
+            z-index: 10;
+        }
+        
+        .gallery-thumb {
+            width: 60px;
+            height: 60px;
+            object-fit: cover;
+            border-radius: 5px;
+            cursor: pointer;
+            opacity: 0.6;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+        
+        .gallery-thumb:hover {
+            opacity: 0.8;
+        }
+        
+        .gallery-thumb.active {
+            opacity: 1;
+            border-color: var(--primary-color);
+        }
+        
+        .media-counter {
+            color: white;
+            font-size: 0.9rem;
+            background: rgba(0,0,0,0.5);
+            padding: 5px 15px;
+            border-radius: 15px;
+        }
+        
         .modal-header { padding: 20px 24px; border-bottom: 1px solid #eee; display: flex; justify-content: space-between; align-items: center; }
         .modal-body { padding: 20px 24px; overflow-y: auto; flex-grow: 1; }
         .modal-footer { padding: 20px 24px; border-top: 1px solid #eee; background: #fcfcfc; }
@@ -405,6 +703,183 @@
             font-size: 0.7rem;
             font-weight: bold;
             z-index: 1;
+        }
+
+        /* Boutons d'action sur carte produit */
+        .product-actions {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 10px;
+            gap: 5px;
+        }
+        
+        .btn-add-cart {
+            flex: 1;
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+        
+        .btn-add-cart:hover {
+            background: #016c4d;
+            transform: translateY(-2px);
+        }
+
+        /* Bouton Ajouter au panier pour carousel */
+        .carousel-cart-btn {
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 25px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 10px;
+            width: 100%;
+        }
+
+        .carousel-cart-btn:hover {
+            background: #016c4d;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(1, 135, 95, 0.3);
+        }
+
+        .carousel-cart-btn:active {
+            transform: translateY(0);
+        }
+
+        /* Animation de confirmation */
+        .cart-added-confirmation {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: var(--primary-color);
+            color: white;
+            padding: 15px 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            z-index: 3000;
+            display: none;
+            align-items: center;
+            gap: 10px;
+            animation: slideInRight 0.3s ease-out;
+        }
+
+        @keyframes slideInRight {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideOutRight {
+            from {
+                transform: translateX(0);
+                opacity: 1;
+            }
+            to {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+        }
+
+        .cart-added-confirmation.show {
+            display: flex;
+        }
+
+        .cart-added-confirmation.hide {
+            animation: slideOutRight 0.3s ease-out forwards;
+        }
+
+        /* --- VERSION MOBILE (RESPONSIVE) --- */
+        @media (max-width: 768px) {
+            
+            /* 1. Ajustement du Header */
+            header {
+                padding: 0.8rem 1rem; /* Moins d'espace inutile */
+            }
+            .logo-area {
+                font-size: 1.1rem; /* Texte du logo un peu plus petit */
+            }
+            .my-logo {
+                height: 50px; /* Logo image ajusté */
+                width: 100px;
+            }
+
+            /* 2. Grille de produits : 2 colonnes garanties sur mobile */
+            .products-grid {
+                grid-template-columns: repeat(2, 1fr); /* Force 2 colonnes */
+                gap: 10px; /* Espace plus petit entre les produits */
+            }
+            
+            /* 3. Carte produit compacte */
+            .product-card {
+                padding: 8px;
+            }
+            .product-title {
+                font-size: 0.85rem; /* Titre plus petit */
+            }
+            .product-price {
+                font-size: 0.9rem;
+            }
+            .btn-add-cart {
+                padding: 6px 10px; /* Bouton plus facile à toucher */
+                font-size: 0.75rem;
+            }
+
+            /* 4. Filtres et Recherche */
+            .search-container {
+                margin-bottom: 10px;
+            }
+            .price-filter {
+                gap: 5px;
+                justify-content: space-between; /* Étale les champs prix */
+            }
+            .price-input {
+                width: 30%; /* Les champs prennent la largeur dispo */
+            }
+
+            /* 5. Carousel Promo */
+            .carousel-slide {
+                min-width: 200px; /* Slides moins larges sur mobile */
+            }
+            .carousel-image-container {
+                height: 140px; /* Image moins haute */
+            }
+
+            /* 6. Modaux (Panier et Galerie) Plein écran */
+            .modal-content, .product-modal-content {
+                width: 95%;
+                margin: 10% auto; /* Centré verticalement */
+                max-height: 85vh; /* Évite que ça dépasse */
+            }
+            
+            /* Galerie spécifique mobile */
+            .gallery-content {
+                width: 100%;
+                height: 100%;
+                border-radius: 0;
+            }
+            .gallery-thumb {
+                width: 50px;
+                height: 50px;
+            }
         }
 
     </style>
@@ -515,42 +990,656 @@
         </div>
     </div>
 
+    <!-- Modal Galerie -->
+    <div id="gallery-modal" class="gallery-modal">
+        <div class="gallery-content">
+            <div class="gallery-header">
+                <span id="gallery-title"></span>
+                <button class="gallery-close" onclick="closeGallery()">&times;</button>
+            </div>
+            
+            <div class="gallery-body">
+                <div id="gallery-media-container">
+                    <!-- Les médias seront injectés ici -->
+                </div>
+            </div>
+            
+            <button class="gallery-nav gallery-prev" onclick="changeGalleryMedia(-1)">❮</button>
+            <button class="gallery-nav gallery-next" onclick="changeGalleryMedia(1)">❯</button>
+            
+            <div class="gallery-thumbnails" id="gallery-thumbnails">
+                <!-- Les miniatures seront injectées ici -->
+            </div>
+            
+            <div class="media-counter" id="media-counter">1/5</div>
+        </div>
+    </div>
+
+    <!-- Notification d'ajout au panier -->
+    <div id="cart-added-notification" class="cart-added-confirmation">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
+        </svg>
+        <span id="cart-notification-text">Produit ajouté au panier !</span>
+    </div>
+
     <script>
         const WHATSAPP_NUMBER = "237680953366"; 
 
         const products = [
-            { id: 1, name: "tenues hawaienne", categories: ["Enfant", "Promo"], price: 2500, image: "hawai bb bleu jaune.jpg" },
-            { id: 2, name: "justaucorps manches longues", categories: ["Femme", "Promo"], price: 3000, image: "justaucorps à manches longues.jpg" },
-            { id: 3, name: "tenue pagne", categories: ["Femme", "Promo"], price: 8000, image: "pagne violet long.jpg" },
-            { id: 4, name: "pagne", categories: ["Femme", "Promo"], price: 6500, image: "pagne maron gris.jpg" },
-            { id: 5, name: "soutien-gorge", categories: ["Femme", "Promo"], price: 2500, image: "soutien-gorge.jpg" },
-            { id: 6, name: "robe moulante", categories: ["Femme", "Promo"], price: 3000, image: "robe moulante.jpg" },
-            { id: 7, name: "tenu lourde femme", categories: ["Femme", "Promo"], price: 30000, image: "tenu lourde femme.jpg" },
-            { id: 8, name: "pyjama", categories: ["Femme", "Homme", "Promo"], price: 10000, image: "pyjama adulte.jpg" },
-            { id: 9, name: "pagne longs", categories: ["Femme", "Promo"], price: 450000, image: "pagne longs.jpg" },
-            { id: 10, name: "pyjama familial", categories: ["Homme", "Enfant", "Femme", "Promo"], price: 8000, image: "pyjama famille.jpg" },
-            { id: 11, name: "ensemble legé", categories: ["Femme", "Promo"], price: 4000, image: "ensemble legé.jpg" },
-            { id: 12, name: "robe légère", categories: ["Femme", "Promo"], price: 9000, image: "robe légère 0.jpg" },
-            { id: 13, name: "pagne a culote", categories: ["Femme", "Promo"], price: 4000, image: "pagne rouge culote.jpg" },
-            { id: 14, name: "nuisete de noel", categories: ["Femme","Promo"], price: 5500, image: "nuisete rouge blanc.jpg"},
-            { id: 15, name: "robe rose bonbon", categories: ["Enfant", "Promo"], price: 7000, image: "robe rose bonbon.jpg"},
-            { id: 16, name: "robe légère", categories: ["Femme", "Promo"], price: 7000, image: "robe legere.jpg" },
-            { id: 17, name: "robe légère", categories: ["Femme", "Promo"], price: 7000, image: "robe legere.jpg" },
-            { id: 18, name: "robe légère", categories: ["Femme", "Promo"], price: 7000, image: "robe legere.jpg" },
-            { id: 19, name: "robe légère", categories: ["Femme", "Promo"], price: 7000, image: "robe legere.jpg" },
-            { id: 20, name: "robe légère", categories: ["Femme", "Promo"], price: 7000, image: "robe legere.jpg" },
-            { id: 21, name: "robe légère", categories: ["Femme", "Promo"], price: 7000, image: "robe legere.jpg" }
-        ];
+        // --- SECTION ENFANT ---
+        { 
+            id: 1, 
+            name: "Tenue Hawaï Bébé", 
+            categories: ["Enfant", "Promo"], 
+            price: 12500, 
+            image: "hawai bb bleu jaune.jpg", 
+            media: [{ type: "image", src: "hawai bb bleu jaune.jpg" }] 
+        },
+        { 
+            id: 2, 
+            name: "robe de princesse 0-3ans", 
+            categories: ["Enfant", "Promo"], 
+            price: 15000, 
+            image: "robe de princesse 0-3ans.jpg", 
+            media: [{ type: "video", src: "robe de princesse 0-3ans.mp4" },
+            { type: "video", src: "robe de princesse 0-3ans.jpg" }
+            ] 
+        },
+        { 
+            id: 3, 
+            name: "Robette Jaquette", 
+            categories: ["Enfant", "Promo"], 
+            price: 15000, 
+            image: "robette jaquette.jpg", 
+            media: [{ type: "image", src: "robette jaquette.jpg" }] 
+        },
+        { 
+            id: 4, 
+            name: "Tenue Enfant Marron", 
+            categories: ["Enfant", "Promo"], 
+            price: 15000, 
+            image: "tenue enfant maron.jpg", 
+            media: [{ type: "image", src: "tenue enfant maron.jpg" },
+                { type: "image", src: "tenue enfant rose.jpg" }
+            ] 
+        },
+        { 
+            id: 5, 
+            name: "Tenue Rose Froufrou", 
+            categories: ["Enfant", "Promo"], 
+            price: 14000, 
+            image: "tenue rose froufrou.jpg", 
+            media: [{ type: "image", src: "tenue rose froufrou.jpg" }] 
+        },
+        { 
+            id: 6, 
+            name: "Robe Rose Fleurie", 
+            categories: ["Enfant", "Promo"], 
+            price: 12500, 
+            image: "robe rose flerie 3ans.jpg", 
+            media: [{ type: "video", src: "robe rose flerie 3ans.mp4" }] 
+        },
+        { 
+            id: 7, 
+            name: "tenu enfant 3-7ans", 
+            categories: ["Enfant", "Promo"], 
+            price: 14500, 
+            image: "tenu enfant 3-7ans.jpg", 
+            media: [{ type: "video", src: "tenu enfant 3-7ans.mp4" }] 
+        },
+        { 
+            id: 8, 
+            name: "Jogging Multicolore 2-6ans", 
+            categories: ["Enfant", "Promo"], 
+            price: 5000, 
+            image: "jogging enfant rouge bleu noir rose .jpg", 
+            media: [{ type: "image", src: "jogging enfant rouge bleu noir rose.jpg" },
+                { type: "image", src: "jogging enfant0.jpg" }
+            ] 
+        },
+        { 
+            id: 9, 
+            name: "Pantalon Jean Cœur", 
+            categories: ["Enfant", "Promo"], 
+            price: 12000, 
+            image: "pantalon jeane coeur 0.jpg", 
+            media: [{ type: "image", src: "pantalon jeane coeur.jpg" },
+                { type: "image", src: "pantalon jeane coeur 0.jpg" }
+            ] 
+        },
+        { 
+            id: 10, 
+            name: "Ensemble Enfant", 
+            categories: ["Enfant", "Promo"], 
+            price: 13500, 
+            image: "ensemble enfant.jpg", 
+            media: [{ type: "image", src: "ensemble enfant.jpg" }] 
+        },
+        { 
+            id: 11, 
+            name: "Rouge Blanc 4ans", 
+            categories: ["Enfant", "Promo"], 
+            price: 13000, 
+            image: "rouge blanch bb.jpg", 
+            media: [{ type: "image", src: "rouge blanch bb.jpg" }] 
+        },
+        { 
+            id: 12, 
+            name: "Robe Rose Bonbon 4-10ans", 
+            categories: ["Enfant", "Promo"], 
+            price: 25000, 
+            image: "robe rose bonbon.jpg", 
+            media: [{ type: "image", src: "robe rose bonbon.jpg" }] 
+        },
+        { 
+            id: 13, 
+            name: "Robe Princesse Bleu Ciel", 
+            categories: ["Enfant", "Promo"], 
+            price: 8000, 
+            image: "robe princesse bleu ciel blanc.jpg", 
+            media: [{ type: "image", src: "robe princesse bleu ciel blanc.jpg" }] 
+        },
+        { 
+            id: 14, 
+            name: "tenue longue rouge", 
+            categories: ["Enfant", "Promo"], 
+            price: 9000, 
+            image: "tenue longue rouge.jpg", 
+            media: [{ type: "video", src: "tenue longue rouge.mp4" }] 
+        },
+        { 
+            id: 15, 
+            name: "Garçon Responsable 3-7-12-14ans", 
+            categories: ["Enfant", "Promo"], 
+            price: 18500, 
+            image: "tenue resp garçon 0 gris blanc bleu.jpg", 
+            media: [{ type: "image", src: "tenue resp garçon 0 gris blanc bleu.jpg" },
+                { type: "image", src: "tenue resp garçon rouge bleu maron.jpg" }
+            ] 
+        },
+        { 
+            id: 16, 
+            name: "Robette Rose 2 Pièces 3-9ans", 
+            categories: ["Enfant", "Promo"], 
+            price: 12000, 
+            image: "robette roise 2 pieces.jpg", 
+            media: [{ type: "image", src: "robette roise 2 pieces.jpg" }] 
+        },
+        { 
+            id: 18, 
+            name: "Robe Princesse 3-8 ans", 
+            categories: ["Enfant", "Promo"], 
+            price: 15500, 
+            image: "1robe 2 princesse rose blanc bleu 3-8ans.jpg", 
+            media: [{ type: "image", src: "1robe 2 princesse rose blanc bleu 3-8ans 0.jpg" },
+                { type: "image", src: "1robe 2 princesse rose blanc bleu 3-8ans.jpg" }
+            ] 
+        },
+        { 
+            id: 19, 
+            name: "Robe Enfant 6mois-3ans", 
+            categories: ["Enfant", "Promo"], 
+            price: 6000, 
+            image: "robette rose belge bleu.jpg", 
+            media: [{ type: "video", src: "robe enfant bleu rose et creme 6mois-3ans.mp4" },
+                { type: "image", src: "robette rose belge bleu.jpg" },
+                { type: "image", src: "robe enfant bleu rose et creme 6mois-3ans.jpg" }
+            ] 
+        },
+        { 
+            id: 20, 
+            name: "Robette Princesse 0-4ans", 
+            categories: ["Enfant", "Promo"], 
+            price: 16000, 
+            image: "robete de princesse.jpg", 
+            media: [{ type: "video", src: "robete de princesse.mp4" }] 
+        },
+
+        // --- SECTION FEMME ---
+        { 
+            id: 22, 
+            name: "Robe Légère", 
+            categories: ["Femme", "Promo"], 
+            price: 10000, 
+            image: "robe légère 0.jpg", 
+            media: [{ type: "image", src: "robe légère 0.jpg" }] 
+        },
+        { 
+            id: 23, 
+            name: "Pagne Long", 
+            categories: ["Femme", "Promo"], 
+            price: 10000, 
+            image: "pagne violet long.jpg", 
+            media: [{ type: "image", src: "pagne longs.jpg" },
+                { type: "video", src: "04_pagne_long.mp4" },
+                { type: "image", src: "pagne maron gris.jpg" },
+                { type: "image", src: "pagne violet long.jpg" }
+            ]
+        },
+        { 
+            id: 25, 
+            name: "Robe Moulante", 
+            categories: ["Femme", "Promo"], 
+            price: 3000, 
+            image: "robe moulante.jpg", 
+            media: [{ type: "image", src: "robe moulante.jpg" }] 
+        },
+        { 
+            id: 26, 
+            name: "trop top", 
+            categories: ["Femme", "Promo"], 
+            price: 2500, 
+            image: "soutien-gorge.jpg", 
+            media: [{ type: "image", src: "soutien-gorge.jpg" }] 
+        },
+        { 
+            id: 27, 
+            name: "Nuisette Rouge Blanc", 
+            categories: ["Femme", "Promo"], 
+            price: 3000, 
+            image: "nuisete rouge blanc.jpg", 
+            media: [{ type: "image", src: "nuisete rouge blanc.jpg" }] 
+        },
+        { 
+            id: 28, 
+            name: "Justaucorps Manches Longues", 
+            categories: ["Femme", "Promo"], 
+            price: 3000, 
+            image: "justaucorps à manches longues.jpg", 
+            media: [{ type: "image", src: "justaucorps à manches longues.jpg" }] 
+        },
+        { 
+            id: 29, 
+            name: "Pagne Violet Court", 
+            categories: ["Femme", "Promo"], 
+            price: 4000, 
+            image: "pagne violet court.jpg", 
+            media: [{ type: "image", src: "pagne violet court.jpg" }] 
+        },
+        { 
+            id: 30, 
+            name: "Ensemble Rouge Culotte", 
+            categories: ["Femme", "Promo"], 
+            price: 7000, 
+            image: "pagne rouge culote.jpg", 
+            media: [{ type: "image", src: "pagne rouge culote.jpg" }] 
+        },
+        { 
+            id: 31, 
+            name: "Ensemble vert", 
+            categories: ["Femme", "Promo"], 
+            price: 12000, 
+            image: "ensemble verts.jpg", 
+            media: [{ type: "video", src: "ensemble vert.mp4" }] 
+        },
+        { 
+            id: 32, 
+            name: "Ensemble Dame DL", 
+            categories: ["Femme", "Promo"], 
+            price: 5000, 
+            image: "08_ensemble_damDL.jpg", 
+            media: [{ type: "image", src: "08_ensemble_damDL.jpg" }] 
+        },
+        // --- VIDÉOS FEMME ---
+        { 
+            id: 33, 
+            name: "Tenue Maman", 
+            categories: ["Femme", "Promo"], 
+            price: 5000, 
+            image: "03_tenue_maman.jpg", 
+            media: [{ type: "video", src: "03_tenue_maman.mp4" }] 
+        },
+        { 
+            id: 34, 
+            name: "Pantalon Moulant", 
+            categories: ["Femme", "Promo"], 
+            price: 6000, 
+            image: "03_pantalon_moulant.jpg", 
+            media: [{ type: "video", src: "03_pantalon_moulant.mp4" }] 
+        },
+        { 
+            id: 35, 
+            name: "Robe Femme", 
+            categories: ["Femme", "Promo"], 
+            price: 8500, 
+            image: "04_robe_femme.jpg", 
+            media: [{ type: "video", src: "04_robe_femme.mp4" }] 
+        },
+        { 
+            id: 36, 
+            name: "Justaucorps Boucle", 
+            categories: ["Femme", "Promo"], 
+            price: 3500, 
+            image: "juste corps a boucle.jpg", 
+            media: [{ type: "video", src: "juste corps a boucle.mp4" }] 
+        },
+        { 
+            id: 37, 
+            name: "Tenue Lourde", 
+            categories: ["Femme", "Promo"], 
+            price: 25000, 
+            image: "tenu lourde femme.jpg",
+            media: [//{ type: "video", src: "20_tenu_lourde_femme.mp4" },
+            { type: "image", src: "tenu lourde femme.jpg" }
+                ]
+        },
+        { 
+            id: 38, 
+            name: "Ensemble Léger", 
+            categories: ["Femme", "Promo"], 
+            price: 4000, 
+            image: "ensemble legé.jpg", 
+            media: [{ type: "video", src: "ensemble legé.mp4" },
+                { type: "image", src: "ensemble legé.jpg" }
+            ] 
+        },
+
+        // --- SECTION HOMME ---
+        { 
+            id: 39, 
+            name: "Chemise Homme", 
+            categories: ["Homme", "Promo"], 
+            price: 3000, 
+            image: "chemise homme.jpg", 
+            media: [{ type: "image", src: "chemise homme.jpg" }] 
+        },
+
+        // --- SECTION AUTRE (Sacs, Pyjamas, etc.) ---
+        { 
+            id: 40, 
+            name: "Pyjama Famille", 
+            categories: ["Femme","Homme","Enfant","Autre", "Promo"], 
+            price: 12000, 
+            image: "pyjama famille.jpg", 
+            media: [{ type: "image", src: "pyjama famille.jpg" }] 
+        },
+        { 
+            id: 41, 
+            name: "Pyjama Adulte", 
+            categories: ["Autre", "Promo"], 
+            price: 15000, 
+            image: "pyjama adulte.jpg", 
+            media: [{ type: "image", src: "pyjama adulte.jpg" }] 
+        },
+        { 
+            id: 42, 
+            name: "manequin homme", 
+            categories: ["Promo","Autre"], 
+            price: 50000, 
+            image: "manequin homme kara.jpg", 
+            media: [{ type: "image", src: "manequin homme kara.jpg" }] 
+        },
+        { 
+            id: 43, 
+            name: "manequin femme", 
+            categories: ["Promo","Autre"], 
+            price: 40000, 
+            image: "manequin femme trenka.jpg", 
+            media: [{ type: "image", src: "manequin femme trenka.jpg" }] 
+        },
+        { 
+            id: 44, 
+            name: "manequin femme", 
+            categories: ["Femme","Homme","Enfant","Autre", "Promo"], 
+            price: 32000, 
+            image: "manequin femme tren.jpg", 
+            media: [{ type: "image", src: "manequin femme tren 0.jpg" },
+                { type: "image", src: "manequin femme tren.jpg" }
+            ] 
+        },
+        { 
+            id: 45, 
+            name: "manequin femme", 
+            categories: ["Autre", "Promo"], 
+            price: 35000, 
+            image: "manequin femme tre okn.jpg", 
+            media: [{ type: "image", src: "manequin femme tre okn.jpg" }] 
+        },
+        { 
+            id: 46, 
+            name: "Tête de manequin", 
+            categories: ["Autre", "Promo"], 
+            price: 12000, 
+            image: "tête manequin femme  diokn.jpg", 
+            media: [{ type: "image", src: "tête manequin femme  diokn.jpg" }] 
+        },
+        { 
+            id: 47, 
+            name: "manequin enfant", 
+            categories: ["Autre", "Promo"], 
+            price: 25000, 
+            image: "manequin enfant 12ans.jpg", 
+            media: [{ type: "image", src: "manequin enfant 12ans.jpg" }] 
+        },
+        { 
+            id: 48, 
+            name: "robe évasée", 
+            categories: ["Femme", "Promo"], 
+            price: 5000, 
+            image: "01_robe_evaseDL.jpg", 
+            media: [{ type: "video", src: "01_robe_evaseDL.mp4" }] 
+        },
+        { 
+            id: 49, 
+            name: "pentoufle de noel", 
+            categories: ["Femme", "Homme", "Promo"], 
+            price: 8000, 
+            image: "WhatsApp Vidéo 2025-12-22 à 07.24.42_3dfe32d3.jpg", 
+            media: [{ type: "video", src: "WhatsApp Vidéo 2025-12-22 à 07.24.42_3dfe32d3.mp4" }] 
+        },
+        { 
+            id: 50, 
+            name: "pantoufle verte", 
+            categories: ["Femme", "Homme", "Promo"], 
+            price: 10000, 
+            image: "pantoufle verte.jpg", 
+            media: [{ type: "video", src: "pantoufle verte.mp4" }] 
+        },
+        { 
+            id: 51, 
+            name: "robette1 princesse 4-8ans", 
+            categories: ["Femme", "Promo"], 
+            price: 16000, 
+            image: "robette1 princesse 3.jpg", 
+            media: [{ type: "video", src: "robette1 princesse 3.mp4" }] 
+        },
+        { 
+            id: 52, 
+            name: "garçon respo 3-12ans", 
+            categories: ["Enfant", "Promo"], 
+            price: 17000, 
+            image: "garçon respo 0.jpg", 
+            media: [{ type: "image", src: "garçon respo 0.jpg" }] 
+        },
+        { 
+            id: 53, 
+            name: "robe princesse", 
+            categories: ["Enfant", "Promo"], 
+            price: 10000, 
+            image: "robe princesse rose bleu.jpg", 
+            media: [{ type: "video", src: "robe princesse rose bleu.mp4" }] 
+        },
+        { 
+            id: 54, 
+            name: "robette princesse", 
+            categories: ["Enfant", "Promo"], 
+            price: 10000, 
+            image: "robette rose foncé.jpg", 
+            media: [{ type: "image", src: "robette rose foncé.jpg" }] 
+        },
+        { 
+            id: 55, 
+            name: "ensemble dame", 
+            categories: ["Femme", "Promo"], 
+            price: 8000, 
+            image: "05_ensemble dame.jpg", 
+            media: [{ type: "video", src: "05_ensemble dame.mp4" },
+                 { type: "video", src: "05_ensemble dame_00.mp4" }
+            ] 
+        },
+        { 
+            id: 56, 
+            name: "robe dame", 
+            categories: ["Femme", "Promo"], 
+            price: 7500, 
+            image: "03_robe_maman.jpg", 
+            media: [{ type: "video", src: "03_robe_maman.mp4" }
+            ] 
+        },
+        { 
+            id: 57, 
+            name: "ensemble de plage1", 
+            categories: ["Femme", "Promo"], 
+            price: 7500, 
+            image: "ensemble de plage1.jpg", 
+            media: [{ type: "image", src: "ensemble de plage.jpg" },
+            { type: "image", src: "ensemble de plage0.jpg" },
+            { type: "image", src: "ensemble de plage1.jpg" },
+            { type: "image", src: "ensemble de plage2.jpg" },
+            { type: "image", src: "ensemble de plage3.jpg" },
+            { type: "image", src: "ensemble de plage4.jpg" },
+            { type: "image", src: "ensemble de plage5.jpg" },
+            { type: "image", src: "ensemble de plage6.jpg" }
+            ] 
+        },
+        { 
+            id: 58, 
+            name: "robe legere plage", 
+            categories: ["Femme", "Promo"], 
+            price: 7500, 
+            image: "robe legere plage.jpg", 
+            media: [{ type: "image", src: "robe legere plage.jpg" },
+            { type: "image", src: "robe legere plage0.jpg" },
+            { type: "image", src: "robe legere plage1.jpg" },
+            { type: "image", src: "robe legere plage2.jpg" }
+            ] 
+        }
+    ];
+
+        // Pour les produits qui n'ont pas de propriété media, on la crée automatiquement
+        products.forEach(product => {
+            if (!product.media) {
+                product.media = [
+                    { type: "image", src: product.image }
+                ];
+            }
+        });
 
         let cart = [];
         let currentFilter = 'all';
         let currentSlide = 0;
         let promoProducts = [];
+        
+        // Variables pour la galerie
+        let currentGalleryProduct = null;
+        let currentGalleryIndex = 0;
+
+        // --- FONCTIONS GALERIE ---
+
+        function openGallery(productId, index = 0) {
+            const product = products.find(p => p.id === productId);
+            if (!product) return;
+            
+            currentGalleryProduct = product;
+            currentGalleryIndex = index;
+            
+            updateGallery();
+            
+            document.getElementById('gallery-modal').style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+        }
+        
+        function closeGallery() {
+            document.getElementById('gallery-modal').style.display = 'none';
+            document.body.style.overflow = 'auto';
+            
+            // Arrêter les vidéos
+            const video = document.querySelector('.gallery-video');
+            if (video) {
+                video.pause();
+            }
+        }
+        
+        function changeGalleryMedia(direction) {
+            if (!currentGalleryProduct) return;
+            
+            const mediaCount = currentGalleryProduct.media.length;
+            currentGalleryIndex = (currentGalleryIndex + direction + mediaCount) % mediaCount;
+            
+            updateGallery();
+        }
+        
+        function goToGalleryMedia(index) {
+            if (!currentGalleryProduct) return;
+            
+            currentGalleryIndex = index;
+            updateGallery();
+        }
+        
+        function updateGallery() {
+            if (!currentGalleryProduct) return;
+            
+            const mediaContainer = document.getElementById('gallery-media-container');
+            const thumbnailsContainer = document.getElementById('gallery-thumbnails');
+            const titleElement = document.getElementById('gallery-title');
+            const counterElement = document.getElementById('media-counter');
+            
+            // Mettre à jour le titre
+            titleElement.textContent = currentGalleryProduct.name;
+            
+            // Mettre à jour le compteur
+            counterElement.textContent = `${currentGalleryIndex + 1}/${currentGalleryProduct.media.length}`;
+            
+            // Afficher le média courant
+            const currentMedia = currentGalleryProduct.media[currentGalleryIndex];
+            
+            if (currentMedia.type === 'video') {
+                mediaContainer.innerHTML = `
+                    <video class="gallery-video" controls autoplay>
+                        <source src="${currentMedia.src}" type="video/mp4">
+                        Votre navigateur ne supporte pas la lecture de vidéos.
+                    </video>
+                `;
+            } else {
+                mediaContainer.innerHTML = `
+                    <img src="${currentMedia.src}" alt="${currentGalleryProduct.name}" class="gallery-media" onerror="this.src='https://placehold.co/600x400/333/FFF?text=Image+non+disponible'">
+                `;
+            }
+            
+            // Mettre à jour les miniatures
+            thumbnailsContainer.innerHTML = currentGalleryProduct.media.map((media, index) => {
+                if (media.type === 'video') {
+                    return `
+                        <div class="gallery-thumb-container" onclick="goToGalleryMedia(${index})">
+                            <div class="gallery-thumb" style="display: flex; align-items: center; justify-content: center; background: #333;">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="white">
+                                    <path d="M8 5v14l11-7z"/>
+                                </svg>
+                            </div>
+                        </div>
+                    `;
+                } else {
+                    return `
+                        <img src="${media.src}" alt="Miniature ${index + 1}" 
+                             class="gallery-thumb ${index === currentGalleryIndex ? 'active' : ''}" 
+                             onclick="goToGalleryMedia(${index})"
+                             onerror="this.src='https://placehold.co/60x60/333/FFF?text=Img'">
+                    `;
+                }
+            }).join('');
+        }
+        
+        // Fermer la galerie avec la touche Échap
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape') {
+                closeGallery();
+            }
+        });
 
         // --- CAROUSEL FUNCTIONS ---
 
         function initCarousel() {
-            // Filtrer les produits promo
             promoProducts = products.filter(product => 
                 product.categories.includes("Promo")
             );
@@ -564,25 +1653,40 @@
                 return;
             }
             
-            // Créer les slides
             carouselTrack.innerHTML = promoProducts.map(product => `
-                <div class="carousel-slide" onclick="addToCart(${product.id})">
+                <div class="carousel-slide">
                     <div class="promo-label">🔥 PROMO</div>
-                    <img src="${product.image}" alt="${product.name}" class="carousel-image" onerror="this.src='https://placehold.co/300x180'">
+                    <div class="carousel-image-container" onclick="openGallery(${product.id})">
+                        <img src="${product.image}" alt="${product.name}" class="carousel-image" onerror="this.src='https://placehold.co/300x180'">
+                    </div>
                     <div class="carousel-info">
                         <div class="carousel-name">${product.name}</div>
                         <div class="carousel-price">${product.price.toLocaleString()} FCFA</div>
                         <div class="carousel-categories">${product.categories.filter(cat => cat !== 'Promo').join(' / ')}</div>
+                        
+                        <div class="carousel-actions">
+                            <button class="btn-carousel-gallery" onclick="openGallery(${product.id}); event.stopPropagation();">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M4 6H2v14c0 1.1.9 2 2 2h14v-2H4V6zm16-4H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-8 12.5v-9l6 4.5-6 4.5z"/>
+                                </svg>
+                                Voir galerie
+                            </button>
+                            
+                            <button class="btn-carousel-cart" onclick="addToCart(${product.id}); event.stopPropagation();">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zM1 2v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.14 0-.25-.11-.25-.25l.03-.12.9-1.63h7.45c.75 0 1.41-.41 1.75-1.03l3.58-6.49c.08-.14.12-.31.12-.48 0-.55-.45-1-1-1H5.21l-.94-2H1zm16 16c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2z"/>
+                                </svg>
+                                Ajouter au panier
+                            </button>
+                        </div>
                     </div>
                 </div>
             `).join('');
             
-            // Créer les indicateurs
             indicators.innerHTML = promoProducts.map((_, index) => `
                 <div class="indicator ${index === 0 ? 'active' : ''}" onclick="goToSlide(${index})"></div>
             `).join('');
             
-            // Démarrer le carousel auto
             startAutoCarousel();
         }
         
@@ -602,24 +1706,49 @@
         function updateCarousel() {
             const carouselTrack = document.getElementById('carousel-track');
             const indicators = document.querySelectorAll('.indicator');
-            const slideWidth = 270; // 250px + 20px gap
+            const slideWidth = 270;
             
-            // Mettre à jour la position
             carouselTrack.style.transform = `translateX(-${currentSlide * slideWidth}px)`;
             
-            // Mettre à jour les indicateurs
             indicators.forEach((indicator, index) => {
                 indicator.classList.toggle('active', index === currentSlide);
             });
         }
         
         function startAutoCarousel() {
-            // Changer de slide toutes les 4 secondes
             setInterval(() => {
                 if (promoProducts.length > 1) {
                     moveCarousel(1);
                 }
             }, 4000);
+        }
+
+        // --- NOTIFICATION D'AJOUT AU PANIER ---
+        function showCartNotification(productName) {
+            const notification = document.getElementById('cart-added-notification');
+            const notificationText = document.getElementById('cart-notification-text');
+            
+            // Mettre à jour le texte si un nom de produit est fourni
+            if (productName) {
+                notificationText.textContent = `${productName} ajouté au panier !`;
+            } else {
+                notificationText.textContent = "Produit ajouté au panier !";
+            }
+            
+            // Afficher la notification
+            notification.classList.remove('hide');
+            notification.classList.add('show');
+            
+            // Masquer la notification après 3 secondes
+            setTimeout(() => {
+                notification.classList.remove('show');
+                notification.classList.add('hide');
+                
+                // Retirer la classe hide après l'animation
+                setTimeout(() => {
+                    notification.classList.remove('hide');
+                }, 300);
+            }, 3000);
         }
 
         // --- FONCTION PRINCIPALE DE FILTRAGE ---
@@ -645,13 +1774,30 @@
             } else {
                 noResults.style.display = 'none';
                 grid.innerHTML = filtered.map(product => `
-                    <div class="product-card" onclick="addToCart(${product.id})">
+                    <div class="product-card">
                         ${product.categories.includes("Promo") ? '<div class="promo-label">PROMO</div>' : ''}
-                        <img src="${product.image}" alt="${product.name}" class="product-image" onerror="this.style.display=\'none\'">
+                        
+                        <div class="product-image-container">
+                            ${product.media.length > 1 ? `<div class="media-count">${product.media.length} médias</div>` : ''}
+                            <img src="${product.image}" alt="${product.name}" class="product-image" onerror="this.style.display='none'">
+                            
+                            <button class="view-gallery-btn" onclick="openGallery(${product.id})" title="Voir la galerie">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="white">
+                                    <path d="M4 6H2v14c0 1.1.9 2 2 2h14v-2H4V6zm16-4H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-8 12.5v-9l6 4.5-6 4.5z"/>
+                                </svg>
+                            </button>
+                        </div>
+                        
                         <div class="product-info">
                             <div class="product-title">${product.name}</div>
                             <div class="product-cat">${product.categories.join(' / ')}</div>
                             <div class="product-price">${product.price.toLocaleString()} FCFA</div>
+                        </div>
+                        
+                        <div class="product-actions">
+                            <button class="btn-add-cart" onclick="addToCart(${product.id}); event.stopPropagation();">
+                                Ajouter au panier
+                            </button>
                         </div>
                     </div>
                 `).join('');
@@ -668,16 +1814,19 @@
 
         /* --- LOGIQUE PANIER --- */
         function addToCart(productId){
-            const product=products.find(p=>p.id===productId);
-            const existingItem=cart.find(item=>item.id===productId);
+            const product = products.find(p => p.id === productId);
+            const existingItem = cart.find(item => item.id === productId);
+            
             if(existingItem){
                 existingItem.quantity++;
             } else {
-                cart.push({...product,quantity:1});
+                cart.push({...product, quantity: 1});
             }
-            updateCartUI();
             
-            // Animation feedback
+            updateCartUI();
+            showCartNotification(product.name);
+            
+            // Animation de l'icône panier
             const cartIcon = document.querySelector('.cart-icon');
             cartIcon.style.transform = 'scale(1.2)';
             setTimeout(() => {
@@ -751,6 +1900,9 @@
         window.onclick=function(e){
             if(e.target==document.getElementById('cart-modal')){
                 toggleCart();
+            }
+            if(e.target==document.getElementById('gallery-modal')){
+                closeGallery();
             }
         }
         
