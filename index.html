@@ -49,14 +49,21 @@
         header {
             background: linear-gradient(135deg, #ffffff 0%, #f0faf6 100%);
             padding: 0.75rem 2rem;
-            position: sticky;
+            position: fixed;
             top: 0;
+            left: 0;
+            right: 0;
             z-index: 100;
             box-shadow: 0 2px 16px rgba(1, 135, 95, 0.08);
             border-bottom: 2px solid var(--primary-light);
             display: flex;
             align-items: center;
             justify-content: space-between;
+        }
+
+        /* Espace réservé pour compenser le header fixe */
+        body {
+            padding-top: var(--header-height, 70px);
         }
 
         .logo-area { 
@@ -113,6 +120,10 @@
             scrollbar-width: none;
             background: white;
             border-bottom: 1px solid var(--border-color);
+            position: sticky;
+            top: 0;
+            z-index: 99;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
         }
         .categories-scroll::-webkit-scrollbar { display: none; }
 
@@ -1196,6 +1207,29 @@
             box-shadow: 0 6px 20px rgba(1,135,95,0.5);
         }
 
+        /* ============================================
+           OPTIMISATION IMAGES — LAZY LOADING
+        ============================================ */
+        .product-image,
+        .carousel-image,
+        .gallery-media,
+        .gallery-thumb,
+        .cart-img {
+            background-color: #eef2ee;
+            transition: opacity 0.3s ease;
+        }
+        /* Fade-in dès que l'image est chargée */
+        img.img-loaded {
+            opacity: 1 !important;
+        }
+        img:not(.img-loaded) {
+            opacity: 0;
+        }
+        /* Exception : ne pas masquer les images déjà chargées depuis le cache */
+        img[loading="eager"] {
+            opacity: 1;
+        }
+
     </style>
 </head>
 <body>
@@ -1203,7 +1237,7 @@
     <!-- Header -->
     <header>
         <div class="logo-area">
-            <img src="logo lela.jpg" alt="Logo" class="my-logo">
+            <img src="logo lela.jpg" alt="Logo" class="my-logo" loading="eager" fetchpriority="high" decoding="async" onload="this.classList.add('img-loaded')">
             <span>Lèlà Store</span>
         </div>
         <div class="cart-icon" onclick="toggleCart()">
@@ -1987,7 +2021,7 @@
                 `;
             } else {
                 mediaContainer.innerHTML = `
-                    <img src="${currentMedia.src}" alt="${currentGalleryProduct.name}" class="gallery-media" onerror="this.src='https://placehold.co/600x400/333/FFF?text=Image+non+disponible'">
+                    <img src="${currentMedia.src}" alt="${currentGalleryProduct.name}" class="gallery-media" loading="lazy" decoding="async" onload="this.classList.add('img-loaded')" onerror="this.src='https://placehold.co/600x400/333/FFF?text=Image+non+disponible'">
                 `;
             }
             
@@ -2008,6 +2042,9 @@
                         <img src="${media.src}" alt="Miniature ${index + 1}" 
                              class="gallery-thumb ${index === currentGalleryIndex ? 'active' : ''}" 
                              onclick="goToGalleryMedia(${index})"
+                             loading="lazy"
+                             decoding="async"
+                             onload="this.classList.add('img-loaded')"
                              onerror="this.src='https://placehold.co/60x60/333/FFF?text=Img'">
                     `;
                 }
@@ -2063,11 +2100,19 @@
                 return;
             }
             
-            carouselTrack.innerHTML = promoProducts.map(product => `
+            carouselTrack.innerHTML = promoProducts.map((product, index) => `
                 <div class="carousel-slide">
                     <div class="promo-label">🔥 PROMO</div>
                     <div class="carousel-image-container" onclick="openGallery(${product.id})">
-                        <img src="${product.image}" alt="${product.name}" class="carousel-image" onerror="this.src='https://placehold.co/300x180'">
+                        <img 
+                            src="${product.image}" 
+                            alt="${product.name}" 
+                            class="carousel-image"
+                            loading="${index < 3 ? 'eager' : 'lazy'}"
+                            decoding="async"
+                            fetchpriority="${index < 3 ? 'high' : 'auto'}"
+                            onload="this.classList.add('img-loaded')"
+                            onerror="this.src='https://placehold.co/300x180'">
                     </div>
                     <div class="carousel-info">
                         <div class="carousel-name">${product.name}</div>
@@ -2199,7 +2244,15 @@
                         
                         <div class="product-image-container">
                             ${product.media.length > 1 ? `<div class="media-count">${product.media.length} médias</div>` : ''}
-                            <img src="${product.image}" alt="${product.name}" class="product-image" onerror="this.style.display='none'">
+                            <img 
+                                src="${product.image}" 
+                                alt="${product.name}" 
+                                class="product-image"
+                                loading="${index < 4 ? 'eager' : 'lazy'}"
+                                decoding="async"
+                                fetchpriority="${index < 4 ? 'high' : 'auto'}"
+                                onload="this.classList.add('img-loaded')"
+                                onerror="this.style.display='none'">
                             
                             <button class="view-gallery-btn" onclick="openGallery(${product.id})" title="Voir la galerie">
                                 <svg width="20" height="20" viewBox="0 0 24 24" fill="white">
@@ -2283,7 +2336,7 @@
                 total+=item.price*item.quantity;
                 return`
                 <div class="cart-item">
-                    <img src="${item.image}" class="cart-img" onerror="this.src='https://placehold.co/60x60'">
+                    <img src="${item.image}" class="cart-img" loading="lazy" decoding="async" onload="this.classList.add('img-loaded')" onerror="this.src='https://placehold.co/60x60'">
                     <div class="cart-details">
                         <div class="cart-name">${item.name}</div>
                         <div class="cart-price">${item.price.toLocaleString()} FCFA</div>
@@ -2351,6 +2404,20 @@
             const btn = document.getElementById('backToTop');
             btn.classList.toggle('visible', window.scrollY > 300);
         });
+
+        // Calculer la hauteur du header et l'appliquer partout
+        function updateStickyPositions() {
+            const header = document.querySelector('header');
+            const categories = document.querySelector('.categories-scroll');
+            if (header) {
+                const h = header.offsetHeight;
+                document.documentElement.style.setProperty('--header-height', h + 'px');
+                document.body.style.paddingTop = h + 'px';
+                if (categories) categories.style.top = h + 'px';
+            }
+        }
+        updateStickyPositions();
+        window.addEventListener('resize', updateStickyPositions);
     </script>
 </body>
 </html>
